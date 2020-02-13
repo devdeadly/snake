@@ -44,15 +44,19 @@ const initializeBoard = () => {
  * @param dir proposed direction
  */
 const isValidMovement = (dir: number) => {
+  let { current, left, right, up, down } = direction;
+
+  // check to see if the input is even valid to begin with
+  if (![left, right, up, down].includes(dir)) return false;
+
+  // if the snake is only one cell allow any movement
   if (snek.length === 1) return true;
-  if (direction.current === direction.left && dir === direction.right)
-    return false;
-  if (direction.current === direction.right && dir === direction.left)
-    return false;
-  if (direction.current === direction.up && dir === direction.down)
-    return false;
-  if (direction.current === direction.down && dir === direction.up)
-    return false;
+
+  if (current === left && dir === right) return false;
+  if (current === right && dir === left) return false;
+  if (current === up && dir === down) return false;
+  if (current === down && dir === up) return false;
+
   return true;
 };
 
@@ -160,8 +164,11 @@ const start = (speed = GAME_SPEED.EASY) => {
   initializeBoard();
   initializeSnek();
   setApple();
+
   updateCurrentScore();
   checkForNewBestScore();
+  setOutcome('');
+
   direction.new = direction.down;
   gameInterval = setInterval(() => {
     handleMovement();
@@ -170,7 +177,7 @@ const start = (speed = GAME_SPEED.EASY) => {
 };
 
 const setOutcome = str => {
-  if (str) document.getElementById('cause-of-death').innerHTML = `${str}`;
+  document.getElementById('cause-of-death').innerHTML = `${str}`;
 };
 
 const updateCurrentScore = () => {
@@ -190,9 +197,11 @@ const setBestScore = newBestScore => {
 };
 
 const checkForNewBestScore = () => {
-  if (snek.length > getBestScore()) {
-    setBestScore(snek.length);
-  }
+  if (snek.length > getBestScore()) setBestScore(snek.length);
+  setGameMode();
+};
+
+const setGameMode = () => {
   document.getElementById(
     'game-mode'
   ).innerHTML = `(${currentMode.toLowerCase()})`;
@@ -219,6 +228,9 @@ document.querySelectorAll('.play').forEach((btn: HTMLButtonElement) => {
 
 document.addEventListener('keydown', evt => {
   if (isValidMovement(evt.keyCode)) direction.new = evt.keyCode;
+  else {
+  }
 });
 
+// draw an empty canvas on page load
 initializeBoard();

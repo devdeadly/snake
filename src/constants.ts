@@ -1,7 +1,8 @@
 export const GAME_SPEED = {
-  EASY: 100,
+  EASY: 120,
   MEDIUM: 60,
-  HARD: 30
+  HARD: 30,
+  INSANE: 15
 };
 
 export const OUTCOMES = {
@@ -16,6 +17,6 @@ export class COLORS {
   static ERROR: string = '#ff8c00';
 }
 
-export const CANVAS_DIMENSION: number = 700;
+export const CANVAS_DIMENSION: number = 600;
 export const CELL_DIMENSION: number = 20;
 export const CANVAS_ROWS_COLS: number = CANVAS_DIMENSION / CELL_DIMENSION;
