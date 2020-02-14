@@ -18,6 +18,13 @@ export class COLORS {
   static ERROR: string = '#ff8c00';
 }
 
+export const KEYPAD = {
+  37: 'LEFT',
+  38: 'UP',
+  39: 'RIGHT',
+  40: 'DOWN'
+};
+
 export const CANVAS_DIMENSION: number = 600;
 export const CELL_DIMENSION: number = 20;
 export const CANVAS_ROWS_COLS: number = CANVAS_DIMENSION / CELL_DIMENSION;

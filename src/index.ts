@@ -2,6 +2,7 @@ import { Snek } from './models/Snek';
 import { Apple } from './models/Apple';
 import { Direction } from './models/Direction';
 import {
+  KEYPAD,
   COLORS,
   CANVAS_DIMENSION,
   CANVAS_ROWS_COLS,
@@ -239,9 +240,23 @@ document.querySelectorAll('.play').forEach((btn: HTMLButtonElement) => {
 
 document.addEventListener('keydown', evt => {
   if (isValidMovement(evt.keyCode)) direction.new = evt.keyCode;
-  else {
-  }
 });
 
+document
+  .querySelectorAll('#keypad button')
+  .forEach((btn: HTMLButtonElement) => {
+    btn.addEventListener('click', () => {
+      let correspondingKeyCode = getCodeFromKeypad(btn.value);
+      if (correspondingKeyCode && isValidMovement(correspondingKeyCode))
+        direction.new = correspondingKeyCode;
+    });
+  });
+
+const getCodeFromKeypad = (direction: String): number => {
+  for (let code in KEYPAD) {
+    if (KEYPAD[code] === direction) return Number(code);
+  }
+  return null;
+};
 // draw an empty canvas on page load
 initializeBoard();

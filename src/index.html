@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>snek</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
@@ -18,43 +21,87 @@
   </head>
   <body>
     <main>
-      <h1 class="text-4xl">snek</h1>
-      <p class="text-xl">
-        best<span id="game-mode"></span>: <span id="best-score">N/A</span>
-      </p>
-      <p class="text-xl">current: <span id="current-score">0</span></p>
+      <header>
+        <h1 class="text-3xl md:text-4xl">snek</h1>
+        <p class="text-xs md:text-xl">
+          best<span id="game-mode"></span>: <span id="best-score">N/A</span>
+        </p>
+        <p class="text-xs md:text-xl">
+          current: <span id="current-score">0</span>
+        </p>
+      </header>
 
-      <canvas id="canvas"></canvas>
-      <div class="inline-flex" id="play-buttons">
-        <button
-          class="bg-green-600 hover:bg-green-500 text-gray-800 font-bold py-2 px-4 rounded-l play"
-          value="EASY"
-        >
-          easy
-        </button>
-        <button
-          class="bg-yellow-600 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 play"
-          value="MEDIUM"
-        >
-          medium
-        </button>
-        <button
-          class="bg-orange-600 hover:bg-orange-500 text-gray-800 font-bold py-2 px-4 play"
-          value="HARD"
-        >
-          hard
-        </button>
-
-        <button
-          class="bg-red-600 hover:bg-red-500 text-gray-800 font-bold py-2 px-4 rounded-r play"
-          value="INSANE"
-        >
-          insane
-        </button>
+      <div id="canvas-wrapper">
+        <canvas id="canvas"></canvas>
+        <div>
+          <p id="gameover" class="text-xl text-red-600 mt-4 canvas-outcome"></p>
+          <p id="win" class="text-xl text-green-600 mt-4 canvas-outcome"></p>
+        </div>
       </div>
-      <p id="gameover" class="text-xl text-red-600 mt-4"></p>
-      <p id="win" class="text-xl text-green-600 mt-4"></p>
+      <div class="block sm:hidden">
+        <section id="keypad">
+          <button
+            class="bg-gray-600 hover:bg-gray-500 text-gray-800 font-bold p-3 rounded-t"
+            value="UP"
+          >
+            <i data-feather="chevron-up"></i>
+          </button>
+          <div class="inline-flex">
+            <button
+              class="bg-gray-600 hover:bg-gray-500 text-gray-800 font-bold p-3 rounded-l"
+              value="LEFT"
+            >
+              <i data-feather="chevron-left"></i>
+            </button>
+            <button
+              class="bg-gray-600 hover:bg-gray-500 text-gray-800 font-bold p-3"
+              value="DOWN"
+            >
+              <i data-feather="chevron-down"></i>
+            </button>
+            <button
+              class="bg-gray-600 hover:bg-gray-500 text-gray-800 font-bold p-3 rounded-r"
+              value="RIGHT"
+            >
+              <i data-feather="chevron-right"></i>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <footer>
+        <div class="inline-flex" id="play-buttons">
+          <button
+            class="bg-green-600 hover:bg-green-500 text-gray-800 font-bold py-2 px-4 rounded-l play"
+            value="EASY"
+          >
+            easy
+          </button>
+          <button
+            class="bg-yellow-600 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 play"
+            value="MEDIUM"
+          >
+            medium
+          </button>
+          <button
+            class="bg-orange-600 hover:bg-orange-500 text-gray-800 font-bold py-2 px-4 play"
+            value="HARD"
+          >
+            hard
+          </button>
+          <button
+            class="bg-red-600 hover:bg-red-500 text-gray-800 font-bold py-2 px-4 rounded-r play"
+            value="INSANE"
+          >
+            insane
+          </button>
+        </div>
+      </footer>
     </main>
     <script src="./index.ts"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+      feather.replace();
+    </script>
   </body>
 </html>

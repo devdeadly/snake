@@ -8,14 +8,9 @@ $dark-grey: #26272d;
 
 // @import '~bulma';
 
-#play-buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 2em;
-}
-
 html,
 body {
+  height: 100%;
   background: $dark-grey;
   color: $white;
   font-weight: 700;
@@ -27,10 +22,50 @@ body {
 canvas {
   background: $white;
   margin: 0 auto;
-  // transform: scale(0.5);
+  width: 100%;
 }
 
-.title,
-.subtitle {
-  color: $white;
+@media (min-width: 640px) {
+  canvas {
+    width: inherit;
+  }
+}
+
+main {
+  height: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+#play-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+footer {
+  padding: 1em 0;
+}
+
+#keypad {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvas-wrapper {
+  position: relative;
+}
+
+.canvas-outcome {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button {
+  touch-action: manipulation; // disables zooming in on button press on mobile
 }
