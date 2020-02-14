@@ -72,6 +72,11 @@ const color = (coords: number[][], color: string): void => {
   });
 };
 
+const colorSnake = () => {
+  color(snek.body, COLORS.SNEK);
+  color([snek.body[0]], COLORS.HEAD);
+};
+
 const setApple = () => {
   let x: number;
   let y: number;
@@ -89,15 +94,14 @@ const initializeSnek = () => {
   const x = 0;
   const y = 0;
   snek.body = [[x, y]];
-  ctx.fillStyle = COLORS.SNEK;
-  ctx.fillRect(x, y, CELL_DIMENSION, CELL_DIMENSION);
+  colorSnake();
 };
 
 const checkForSelfCollision = (): boolean => {
   for (let i = 1; i < snek.length; i++) {
     if (areEqualArrays(snek.body[i], snek.body[0])) {
       color([snek.body[i]], COLORS.ERROR);
-      gameOver(OUTCOMES.GAMEOVER);
+      endGame(OUTCOMES.GAMEOVER);
       return true;
     }
   }
@@ -106,8 +110,8 @@ const checkForSelfCollision = (): boolean => {
 
 const checkIfWon = () => {
   if (snek.length === CANVAS_ROWS_COLS * CANVAS_ROWS_COLS) {
-    color(snek.body, COLORS.SNEK);
-    gameOver(OUTCOMES.WIN);
+    colorSnake();
+    endGame(OUTCOMES.WIN);
     return true;
   } else {
   }
@@ -116,7 +120,7 @@ const checkIfWon = () => {
 const isOutOfBounds = (x: number, y: number): boolean => {
   if (x < 0 || y < 0 || x >= CANVAS_ROWS_COLS || y >= CANVAS_ROWS_COLS) {
     color([snek.body[0]], COLORS.ERROR);
-    gameOver(OUTCOMES.GAMEOVER);
+    endGame(OUTCOMES.GAMEOVER);
     return true;
   }
   return false;
@@ -144,7 +148,7 @@ const handleMovement = () => {
       setApple();
       justHitApple = true;
     }
-    color(snek.body, COLORS.SNEK);
+    colorSnake();
     justHitApple = false;
   } else {
     if (areEqualArrays(apple.location, snek.body[0])) {
@@ -156,7 +160,7 @@ const handleMovement = () => {
     }
     color(snek.body, COLORS.BOARD);
     snek.body = [...snek.body.slice(0, -1)];
-    color(snek.body, COLORS.SNEK);
+    colorSnake();
   }
 };
 
@@ -167,7 +171,7 @@ const start = (speed = GAME_SPEED.EASY) => {
 
   updateCurrentScore();
   checkForNewBestScore();
-  setOutcome('');
+  displayOutcome('');
 
   direction.new = direction.down;
   gameInterval = setInterval(() => {
@@ -176,8 +180,15 @@ const start = (speed = GAME_SPEED.EASY) => {
   }, speed);
 };
 
-const setOutcome = str => {
-  document.getElementById('cause-of-death').innerHTML = `${str}`;
+const displayOutcome = str => {
+  if (str === OUTCOMES.GAMEOVER)
+    document.getElementById('gameover').innerHTML = `${str}`;
+  else if (str === OUTCOMES.WIN)
+    document.getElementById('win').innerHTML = `${str}`;
+  else {
+    document.getElementById('gameover').innerHTML = '';
+    document.getElementById('win').innerHTML = '';
+  }
 };
 
 const updateCurrentScore = () => {
@@ -207,10 +218,10 @@ const setGameMode = () => {
   ).innerHTML = `(${currentMode.toLowerCase()})`;
 };
 
-const gameOver = str => {
+const endGame = str => {
   checkForNewBestScore();
   clearInterval(gameInterval);
-  setOutcome(str);
+  displayOutcome(str);
 };
 
 /**
@@ -220,7 +231,7 @@ const gameOver = str => {
 document.querySelectorAll('.play').forEach((btn: HTMLButtonElement) => {
   btn.addEventListener('click', () => {
     clearInterval(gameInterval);
-    setOutcome('');
+    displayOutcome('');
     currentMode = btn.value;
     start(GAME_SPEED[btn.value]);
   });
