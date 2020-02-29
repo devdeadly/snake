@@ -11,7 +11,7 @@ export const OUTCOMES = {
 };
 
 export class COLORS {
-  static SNEK: string = '#006400';
+  static SNAKE: string = '#006400';
   static HEAD: string = '#014d01';
   static APPLE: string = '#8b0000';
   static BOARD: string = '#a9a9a9';

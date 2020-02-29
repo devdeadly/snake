@@ -1,4 +1,4 @@
-import { Snek } from './models/Snek';
+import { Snake } from './models/Snake';
 import { Apple } from './models/Apple';
 import { Direction } from './models/Direction';
 import {
@@ -19,7 +19,7 @@ const ctx: CanvasRenderingContext2D = canvas.getContext(
   '2d'
 ) as CanvasRenderingContext2D;
 
-const snek = new Snek();
+const snake = new Snake();
 const apple = new Apple();
 
 canvas.height = CANVAS_DIMENSION;
@@ -51,7 +51,7 @@ const isValidMovement = (dir: number) => {
   if (![left, right, up, down].includes(dir)) return false;
 
   // if the snake is only one cell allow any movement
-  if (snek.length === 1) return true;
+  if (snake.length === 1) return true;
 
   if (current === left && dir === right) return false;
   if (current === right && dir === left) return false;
@@ -74,8 +74,8 @@ const color = (coords: number[][], color: string): void => {
 };
 
 const colorSnake = () => {
-  color(snek.body, COLORS.SNEK);
-  color([snek.body[0]], COLORS.HEAD);
+  color(snake.body, COLORS.SNAKE);
+  color([snake.body[0]], COLORS.HEAD);
 };
 
 const setApple = () => {
@@ -85,23 +85,23 @@ const setApple = () => {
   do {
     x = Math.floor(Math.random() * CANVAS_ROWS_COLS);
     y = Math.floor(Math.random() * CANVAS_ROWS_COLS);
-  } while (snek.body.some(coord => areEqualArrays(coord, [x, y])));
+  } while (snake.body.some(coord => areEqualArrays(coord, [x, y])));
 
   apple.location = [x, y];
   color([[x, y]], COLORS.APPLE);
 };
 
-const initializeSnek = () => {
+const initializeSnake = () => {
   const x = 0;
   const y = 0;
-  snek.body = [[x, y]];
+  snake.body = [[x, y]];
   colorSnake();
 };
 
 const checkForSelfCollision = (): boolean => {
-  for (let i = 1; i < snek.length; i++) {
-    if (areEqualArrays(snek.body[i], snek.body[0])) {
-      color([snek.body[i]], COLORS.ERROR);
+  for (let i = 1; i < snake.length; i++) {
+    if (areEqualArrays(snake.body[i], snake.body[0])) {
+      color([snake.body[i]], COLORS.ERROR);
       endGame(OUTCOMES.GAMEOVER);
       return true;
     }
@@ -110,7 +110,7 @@ const checkForSelfCollision = (): boolean => {
 };
 
 const checkIfWon = () => {
-  if (snek.length === CANVAS_ROWS_COLS * CANVAS_ROWS_COLS) {
+  if (snake.length === CANVAS_ROWS_COLS * CANVAS_ROWS_COLS) {
     colorSnake();
     endGame(OUTCOMES.WIN);
     return true;
@@ -120,7 +120,7 @@ const checkIfWon = () => {
 
 const isOutOfBounds = (x: number, y: number): boolean => {
   if (x < 0 || y < 0 || x >= CANVAS_ROWS_COLS || y >= CANVAS_ROWS_COLS) {
-    color([snek.body[0]], COLORS.ERROR);
+    color([snake.body[0]], COLORS.ERROR);
     endGame(OUTCOMES.GAMEOVER);
     return true;
   }
@@ -130,7 +130,7 @@ const isOutOfBounds = (x: number, y: number): boolean => {
 const handleMovement = () => {
   direction.current = direction.new;
 
-  let [x, y] = snek.body[0];
+  let [x, y] = snake.body[0];
 
   if (direction.new === direction.left) x--;
   else if (direction.new === direction.right) x++;
@@ -139,12 +139,12 @@ const handleMovement = () => {
 
   if (isOutOfBounds(x, y)) return;
 
-  snek.body.unshift([x, y]);
+  snake.body.unshift([x, y]);
 
   if (checkForSelfCollision()) return;
 
   if (justHitApple) {
-    if (areEqualArrays(apple.location, snek.body[0])) {
+    if (areEqualArrays(apple.location, snake.body[0])) {
       if (checkIfWon()) return;
       setApple();
       justHitApple = true;
@@ -152,22 +152,22 @@ const handleMovement = () => {
     colorSnake();
     justHitApple = false;
   } else {
-    if (areEqualArrays(apple.location, snek.body[0])) {
+    if (areEqualArrays(apple.location, snake.body[0])) {
       // new movement has hit apple
       if (checkIfWon()) return;
       justHitApple = true;
       setApple();
       checkForNewBestScore();
     }
-    color(snek.body, COLORS.BOARD);
-    snek.body = [...snek.body.slice(0, -1)];
+    color(snake.body, COLORS.BOARD);
+    snake.body = [...snake.body.slice(0, -1)];
     colorSnake();
   }
 };
 
 const start = (speed = GAME_SPEED.EASY) => {
   initializeBoard();
-  initializeSnek();
+  initializeSnake();
   setApple();
 
   updateCurrentScore();
@@ -193,23 +193,23 @@ const displayOutcome = str => {
 };
 
 const updateCurrentScore = () => {
-  document.getElementById('current-score').innerHTML = String(snek.length);
+  document.getElementById('current-score').innerHTML = String(snake.length);
 };
 
 const getBestScore = () => {
-  let bestScore = localStorage.getItem(`snek-${currentMode}`) || 0;
+  let bestScore = localStorage.getItem(`snake-${currentMode}`) || 0;
   document.getElementById('best-score').innerHTML = String(bestScore);
 
   return bestScore;
 };
 
 const setBestScore = newBestScore => {
-  localStorage.setItem(`snek-${currentMode}`, newBestScore);
+  localStorage.setItem(`snake-${currentMode}`, newBestScore);
   document.getElementById('best-score').innerHTML = String(getBestScore());
 };
 
 const checkForNewBestScore = () => {
-  if (snek.length > getBestScore()) setBestScore(snek.length);
+  if (snake.length > getBestScore()) setBestScore(snake.length);
   setGameMode();
 };
 

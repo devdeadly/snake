@@ -1,4 +1,4 @@
-export class Snek {
+export class Snake {
   _body: number[][];
   constructor(body: number[][] = []) {
     this._body = body;
